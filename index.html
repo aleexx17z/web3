@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San Andreas Mod Exchange</title>
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+  <style>
+    /* (All CSS unchanged for brevity, same as before) */
+    :root {
+      --primary: #1A73E8;
+      --primary-dark: #1558B0;
+      --background: #F5F7FA;
+      --background-light: #FFFFFF;
+      --accent: #FFB300;
+      --accent2: #00C9A7;
+      --text: #23272A;
+      --text-muted: #6B7280;
+      --card: #FFFFFF;
+      --border-radius: 18px;
+      --shadow: 0 4px 32px rgba(26,115,232,0.10);
+    }
+    [data-theme="dark"] {
+      --primary: #90caf9;
+      --primary-dark: #1976d2;
+      --background: #181a20;
+      --background-light: #23272a;
+      --accent: #ffd54f;
+      --accent2: #26c6da;
+      --text: #f5f7fa;
+      --text-muted: #b0b8c1;
+      --card: #23272a;
+      --shadow: 0 4px 32px rgba(26,115,232,0.20);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background: var(--background-light);
+      box-shadow: var(--shadow);
+      padding: 0 48px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: -1px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      margin-right: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.15);
+    }
+    nav {
+      display: flex;
+      gap: 36px;
+    }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: color 0.2s;
+      position: relative;
+      padding: 4px 0;
+    }
+    nav a:hover, nav a.active {
+      color: var(--primary);
+    }
+    .cta-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 32px;
+      font-size: 1.08rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.12);
+      transition: background 0.2s, transform 0.1s;
+      margin-left: 28px;
+    }
+    .cta-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .avatar-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-left: 18px;
+      border-radius: 50%;
+      overflow: hidden;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.2s;
+    }
+    .avatar-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .avatar-btn:hover {
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+    .theme-toggle {
+      background: var(--background-light);
+      border: 1px solid #e0e7ef;
+      color: var(--primary);
+      border-radius: 8px;
+      padding: 6px 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 18px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 64px 24px 32px 24px;
+      background: linear-gradient(120deg, var(--background) 60%, var(--primary) 120%);
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+    .sidebar {
+      min-width: 220px;
+      max-width: 260px;
+      background: var(--card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 32px 20px;
+      margin-right: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      height: fit-content;
+    }
+    .sidebar h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-group label {
+      font-size: 1rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .filter-group input[type="checkbox"] {
+      accent-color: var(--primary);
+    }
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .hero {
+      background: var(--card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 32px 32px 24px 32px;
+      text-align: center;
+      margin-bottom: 32px;
+      animation: fadeIn 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--primary);
+      letter-spacing: -2px;
+      line-height: 1.1;
+    }
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .hero .hero-btns {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+    .hero .hero-btns .cta-btn {
+      font-size: 1.05rem;
+      padding: 10px 28px;
+    }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      background: var(--background-light);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.07);
+      padding: 10px 18px;
+    }
+    .search-bar input[type="text"] {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      color: var(--text);
+      outline: none;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover {
+      background: var(--primary-dark);
+    }
+    .scripts-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: flex-start;
+    }
+    .script-card {
+      background: var(--background-light);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      padding: 22px 18px 16px 18px;
+      min-width: 240px;
+      max-width: 320px;
+      flex: 1 1 240px;
+      text-align: left;
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: 1.5px solid transparent;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .script-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 6px 24px rgba(88,101,242,0.10);
+      border-color: var(--primary);
+    }
+    .script-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .script-meta {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .script-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .script-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      align-items: center;
+    }
+    .mini-btn, .favorite-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .mini-btn:hover, .favorite-btn:hover {
+      background: var(--primary-dark);
+    }
+    .favorite-btn.favorited {
+      background: var(--accent);
+      color: #23272A;
+    }
+    .favorite-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .script-card .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 8px;
+      vertical-align: middle;
+      border: 1.5px solid var(--primary);
+      cursor: pointer;
+    }
+    .comments-section {
+      margin-top: 18px;
+      background: var(--background-light);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 14px 12px;
+    }
+    .comment {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .comment .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+    .comment-content {
+      background: #f8fafc;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.98rem;
+      min-width: 0;
+      flex: 1;
+    }
+    [data-theme="dark"] .comment-content {
+      background: #23272a;
+    }
+    .comment-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .add-comment-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .add-comment-form input, .add-comment-form textarea {
+      flex: 1;
+      border: 1px solid #e0e7ef;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: #f8fafc;
+      color: var(--text);
+      padding: 6px 8px;
+      resize: vertical;
+    }
+    [data-theme="dark"] .add-comment-form input, [data-theme="dark"] .add-comment-form textarea {
+      background: #23272a;
+      color: var(--text);
+      border: 1px solid #333a44;
+    }
+    .add-comment-form button {
+      background: var(--accent2);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .add-comment-form button:hover {
+      background: #009e7a;
+    }
+    .upload-form {
+      background: var(--background-light);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px 18px;
+      max-width: 420px;
+      margin: 32px auto 0 auto;
+      text-align: left;
+    }
+    .upload-form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+    .upload-form input, .upload-form textarea, .upload-form select {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      border: 1px solid #e0e7ef;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: #f8fafc;
+      color: var(--text);
+      resize: vertical;
+    }
+    .upload-form button {
+      background: var(--accent);
+      color: #23272A;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .upload-form button:hover {
+      background: #ff9800;
+    }
+    .upload-success {
+      color: var(--accent2);
+      font-weight: 700;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .account-section {
+      background: var(--background-light);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px 18px;
+      max-width: 420px;
+      margin: 32px auto 0 auto;
+      text-align: left;
+    }
+    .account-section label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+    .account-section input[type="text"], .account-section input[type="password"] {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      border: 1px solid #e0e7ef;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: #f8fafc;
+      color: var(--text);
+    }
+    .account-section button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .account-section button:hover {
+      background: var(--primary-dark);
+    }
+    .avatar-upload {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .avatar-upload img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+    .avatar-upload input[type="file"] {
+      display: none;
+    }
+    .avatar-upload label {
+      background: var(--accent2);
+      color: #fff;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 0;
+      transition: background 0.2s;
+    }
+    .avatar-upload label:hover {
+      background: #009e7a;
+    }
+    .profile-section {
+      background: var(--background-light);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px 18px;
+      max-width: 420px;
+      margin: 32px auto 0 auto;
+      text-align: left;
+      display: none;
+    }
+    .profile-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+      margin-bottom: 12px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .profile-username {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .profile-mods-title {
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 18px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .profile-mods-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .profile-mod-card {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    [data-theme="dark"] .profile-mod-card {
+      background: #23272a;
+    }
+    .profile-back-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 auto 10px auto;
+      display: block;
+      transition: background 0.2s;
+    }
+    .profile-back-btn:hover {
+      background: var(--primary-dark);
+    }
+    /* --- New styles for profile activity and status --- */
+    .profile-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .profile-status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      background: #b0b8c1;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1.5px var(--primary);
+      margin-right: 4px;
+    }
+    .profile-status-dot.active {
+      background: #00C9A7;
+      box-shadow: 0 0 0 1.5px var(--accent2);
+    }
+    .profile-info-row {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      margin-bottom: 8px;
+    }
+    .profile-activity-title {
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 18px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .profile-activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .profile-activity-item {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.97rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    [data-theme="dark"] .profile-activity-item {
+      background: #23272a;
+    }
+    .profile-activity-item .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 2px;
+      border: 1.5px solid var(--primary);
+    }
+    .profile-activity-meta {
+      color: var(--text-muted);
+      font-size: 0.89rem;
+      margin-bottom: 2px;
+    }
+    .profile-activity-content {
+      color: var(--text);
+      font-size: 0.98rem;
+    }
+    .profile-fav-title {
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 18px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .profile-fav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .profile-fav-item {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.97rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    [data-theme="dark"] .profile-fav-item {
+      background: #23272a;
+    }
+    .profile-fav-item .fav-star {
+      color: var(--accent);
+      font-size: 1.1em;
+      margin-right: 4px;
+    }
+    @media (max-width: 1100px) {
+      .container {
+        flex-direction: column;
+        gap: 0;
+      }
+      .sidebar {
+        margin-bottom: 24px;
+        margin-right: 0;
+      }
+      .main-content {
+        width: 100%;
+      }
+    }
+    @media (max-width: 700px) {
+      .container {
+        flex-direction: column;
+        gap: 0;
+      }
+      .sidebar {
+        margin-bottom: 24px;
+        min-width: 0;
+        max-width: 100%;
+        padding: 18px 8px;
+      }
+      .main-content {
+        width: 100%;
+      }
+      .hero {
+        padding: 14px 4px;
+      }
+      .search-bar {
+        padding: 8px 6px;
+      }
+      .scripts-list {
+        gap: 10px;
+      }
+      .profile-section {
+        padding: 12px 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#" class="logo" id="logo-link">
+      <span class="logo-icon" aria-label="San Andreas Mod Exchange" title="San Andreas Mod Exchange">🧩</span>
+      San Andreas Mod Exchange
+    </a>
+    <nav>
+      <a href="#" class="active" id="nav-home">Home</a>
+      <a href="#scripts" id="nav-scripts">Mods</a>
+      <a href="#upload" id="nav-upload">Upload</a>
+      <a href="#account" id="nav-account">Account</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle-btn" title="Toggle dark mode">🌙</button>
+    <button class="avatar-btn" id="avatar-btn" style="display:none;">
+      <img src="" alt="Avatar" id="header-avatar" />
+    </button>
+    <button class="cta-btn" id="login-btn">Login</button>
+    <button class="cta-btn" id="logout-btn" style="display:none;">Logout</button>
+  </header>
+  <main>
+    <div class="container">
+      <aside class="sidebar">
+        <h2>Filter Mods</h2>
+        <div class="filter-group">
+          <label><input type="checkbox" class="filter-type" value="mapping" checked> Mapping</label>
+          <label><input type="checkbox" class="filter-type" value="scripts" checked> Scripts</label>
+          <label><input type="checkbox" class="filter-type" value="mods" checked> Mods</label>
+          <label><input type="checkbox" class="filter-type" value="skins" checked> Skins</label>
+        </div>
+        <div class="filter-group">
+          <label><input type="checkbox" class="filter-type" value="favorite"> Favorites</label>
+        </div>
+      </aside>
+      <section class="main-content" id="main-content">
+        <section class="hero" id="hero-section">
+          <h1>San Andreas Mod Exchange</h1>
+          <p>
+            Register, log in, and upload your own scripts, maps, mods, and skins for Multi Theft Auto: San Andreas.<br>
+            You must register before you can log in or upload. No mods are available until users upload them!
+          </p>
+          <div class="hero-btns">
+            <button class="cta-btn" id="signup-btn">Register</button>
+            <button class="cta-btn" style="background:var(--accent);color:#23272A;" id="upload-btn">Upload Mod</button>
+            <button class="cta-btn" style="background:var(--accent2);color:#fff;" id="browse-btn">Browse Mods</button>
+          </div>
+        </section>
+        <div class="search-bar" id="scripts">
+          <input type="text" id="search-input" placeholder="Search scripts, mods, skins, mapping...">
+          <button id="search-btn">Search</button>
+        </div>
+        <div class="scripts-list" id="scripts-list">
+          <!-- Mods will be rendered here -->
+        </div>
+        <form class="upload-form" id="upload-form" style="display:none;">
+          <h2>Upload Mod</h2>
+          <label for="script-title">Title</label>
+          <input type="text" id="script-title" name="title" required>
+          <label for="script-type">Type</label>
+          <select id="script-type" name="type" required>
+            <option value="mapping">Mapping</option>
+            <option value="scripts">Script</option>
+            <option value="mods">Mod</option>
+            <option value="skins">Skin</option>
+          </select>
+          <label for="script-desc">Description</label>
+          <textarea id="script-desc" name="desc" rows="3" required></textarea>
+          <label for="script-file">Mod File (.zip, .lua, etc)</label>
+          <input type="file" id="script-file" name="file" accept=".zip,.lua,.map,.txd,.dff,.png,.jpg" required>
+          <button type="submit">Upload</button>
+          <div class="upload-success" id="upload-success" style="display:none;">Mod uploaded!</div>
+        </form>
+        <form class="account-section" id="account-section" style="display:none;">
+          <h2>Register</h2>
+          <div class="avatar-upload">
+            <img src="" alt="Avatar" id="account-avatar" />
+            <label for="avatar-input">Change Avatar</label>
+            <input type="file" id="avatar-input" accept="image/*">
+          </div>
+          <label for="account-username">Username</label>
+          <input type="text" id="account-username" name="username" required>
+          <label for="account-password">Password</label>
+          <input type="password" id="account-password" name="password" required>
+          <button type="button" id="save-account-btn">Register</button>
+        </form>
+        <form class="account-section" id="login-section" style="display:none;">
+          <h2>Login</h2>
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" name="username" required>
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" required>
+          <button type="button" id="do-login-btn">Login</button>
+        </form>
+        <section class="profile-section" id="profile-section">
+          <!-- User profile will be rendered here -->
+        </section>
+      </section>
+    </div>
+  </main>
+  <footer>
+    &copy; 2024 San Andreas Mod Exchange. All rights reserved. &mdash; Community mods for everyone.
+  </footer>
+  <script>
+    // --- Data Storage (localStorage for demo) ---
+    const STORAGE_KEY = 'sa_mod_exchange_data_v1';
+    function getData() {
+      let data = localStorage.getItem(STORAGE_KEY);
+      if (!data) {
+        data = {
+          scripts: [],
+          users: [],
+          currentUser: null
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+      return JSON.parse(localStorage.getItem(STORAGE_KEY));
+    }
+    function setData(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // --- Theme (Dark Mode) ---
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('sa_mod_theme', theme);
+      document.getElementById('theme-toggle-btn').textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+    document.getElementById('theme-toggle-btn').onclick = toggleTheme;
+    (function() {
+      const saved = localStorage.getItem('sa_mod_theme');
+      setTheme(saved === 'dark' ? 'dark' : 'light');
+    })();
+
+    // --- User Auth & Account ---
+    function getCurrentUser() {
+      const data = getData();
+      return data.currentUser ? data.users.find(u => u.username === data.currentUser) : null;
+    }
+    function setCurrentUser(username) {
+      const data = getData();
+      data.currentUser = username;
+      setData(data);
+      renderHeader();
+    }
+    function logout() {
+      const data = getData();
+      data.currentUser = null;
+      setData(data);
+      renderHeader();
+      showSection('login');
+    }
+    // --- Section Management ---
+    function showSection(section) {
+      // Hide all main-content children except the one for the section
+      document.getElementById('upload-form').style.display = section === 'upload' ? '' : 'none';
+      document.getElementById('account-section').style.display = section === 'account' ? '' : 'none';
+      document.getElementById('login-section').style.display = section === 'login' ? '' : 'none';
+      document.getElementById('profile-section').style.display = section === 'profile' ? '' : 'none';
+      document.getElementById('hero-section').style.display = (!section) ? '' : 'none';
+      document.getElementById('scripts').style.display = (!section) ? '' : 'none';
+      document.getElementById('scripts-list').style.display = (!section) ? '' : 'none';
+    }
+    function renderHeader() {
+      const user = getCurrentUser();
+      document.getElementById('login-btn').style.display = user ? 'none' : '';
+      document.getElementById('logout-btn').style.display = user ? '' : 'none';
+      document.getElementById('avatar-btn').style.display = user ? '' : 'none';
+      if (user) {
+        document.getElementById('header-avatar').src = user.avatar || 'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + encodeURIComponent(user.username);
+      }
+    }
+    renderHeader();
+
+    // --- Navigation ---
+    document.getElementById('nav-home').onclick = function(e) {
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      showSection(null);
+    };
+    document.getElementById('nav-scripts').onclick = function(e) {
+      e.preventDefault();
+      document.getElementById('scripts').scrollIntoView({behavior: 'smooth'});
+      showSection(null);
+    };
+    document.getElementById('nav-upload').onclick = function(e) {
+      e.preventDefault();
+      if (!getCurrentUser()) {
+        alert('You need to log in to upload mods.');
+        showSection('login');
+        return;
+      }
+      showSection('upload');
+      document.getElementById('upload-form').scrollIntoView({behavior: 'smooth'});
+    };
+    document.getElementById('nav-account').onclick = function(e) {
+      e.preventDefault();
+      if (!getCurrentUser()) {
+        showSection('login');
+      } else {
+        showSection('account');
+        document.getElementById('account-section').scrollIntoView({behavior: 'smooth'});
+      }
+    };
+    document.getElementById('logo-link').onclick = function(e) {
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      showSection(null);
+    };
+
+    // --- Auth Buttons ---
+    document.getElementById('login-btn').onclick = function() {
+      showSection('login');
+      document.getElementById('login-section').scrollIntoView({behavior: 'smooth'});
+    };
+    document.getElementById('logout-btn').onclick = logout;
+    document.getElementById('avatar-btn').onclick = function() {
+      showSection('account');
+      document.getElementById('account-section').scrollIntoView({behavior: 'smooth'});
+    };
+
+    // --- Hero Buttons ---
+    document.getElementById('signup-btn').onclick = function() {
+      showSection('account');
+      document.getElementById('account-section').scrollIntoView({behavior: 'smooth'});
+    };
+    document.getElementById('upload-btn').onclick = function() {
+      if (!getCurrentUser()) {
+        alert('You need to log in to upload mods.');
+        showSection('login');
+        return;
+      }
+      showSection('upload');
+      document.getElementById('upload-form').scrollIntoView({behavior: 'smooth'});
+    };
+    document.getElementById('browse-btn').onclick = function() {
+      document.getElementById('scripts').scrollIntoView({behavior: 'smooth'});
+      showSection(null);
+    };
+
+    // --- Account Section (Register/Edit) ---
+    function renderAccountSection() {
+      const user = getCurrentUser();
+      const avatar = user ? (user.avatar || 'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + encodeURIComponent(user.username)) : '';
+      document.getElementById('account-avatar').src = avatar;
+      document.getElementById('account-username').value = user ? user.username : '';
+      document.getElementById('account-password').value = user ? user.password : '';
+    }
+    document.getElementById('save-account-btn').onclick = function() {
+      const username = document.getElementById('account-username').value.trim();
+      const password = document.getElementById('account-password').value;
+      if (!username || !password) {
+        alert('Username and password required.');
+        return;
+      }
+      let data = getData();
+      let user = data.users.find(u => u.username === username);
+      if (!getCurrentUser()) {
+        // Register
+        if (user) {
+          alert('Username already exists.');
+          return;
+        }
+        user = {username, password, avatar: '', favorites: []};
+        data.users.push(user);
+        data.currentUser = username;
+        setData(data);
+        renderHeader();
+        alert('Registration successful! You are now logged in.');
+        showSection(null);
+      } else {
+        // Edit
+        user = data.users.find(u => u.username === data.currentUser);
+        user.username = username;
+        user.password = password;
+        data.currentUser = username;
+        setData(data);
+        renderHeader();
+        alert('Account updated!');
+        showSection(null);
+      }
+    };
+    document.getElementById('avatar-input').onchange = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        let data = getData();
+        let user = getCurrentUser();
+        if (user) {
+          user.avatar = ev.target.result;
+          // update in users array
+          let idx = data.users.findIndex(u => u.username === user.username);
+          data.users[idx] = user;
+          setData(data);
+          renderHeader();
+          renderAccountSection();
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // --- Login Section ---
+    document.getElementById('do-login-btn').onclick = function() {
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      let data = getData();
+      let user = data.users.find(u => u.username === username && u.password === password);
+      if (!user) {
+        alert('Invalid username or password.');
+        return;
+      }
+      data.currentUser = username;
+      setData(data);
+      renderHeader();
+      showSection(null);
+      alert('Logged in!');
+    };
+
+    // --- Upload Mod ---
+    document.getElementById('upload-form').onsubmit = function(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) {
+        alert('You must be logged in to upload.');
+        return;
+      }
+      const title = document.getElementById('script-title').value.trim();
+      const type = document.getElementById('script-type').value;
+      const desc = document.getElementById('script-desc').value.trim();
+      const fileInput = document.getElementById('script-file');
+      if (!title || !desc || !fileInput.files[0]) {
+        alert('All fields required.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        let data = getData();
+        const newScript = {
+          id: Date.now(),
+          title,
+          type,
+          desc,
+          author: user.username,
+          avatar: user.avatar,
+          file: ev.target.result,
+          favorites: [],
+          comments: [],
+          date: Date.now()
+        };
+        data.scripts.unshift(newScript);
+        setData(data);
+        document.getElementById('upload-success').style.display = '';
+        setTimeout(() => {
+          document.getElementById('upload-success').style.display = 'none';
+          showSection(null);
+          renderScripts();
+        }, 1200);
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    };
+
+    // --- Profile Section (View Other Users) ---
+    function renderProfileSection(username) {
+      const data = getData();
+      const user = data.users.find(u => u.username === username);
+      if (!user) {
+        document.getElementById('profile-section').innerHTML = '<div style="color:var(--text-muted);text-align:center;">User not found.</div>';
+        return;
+      }
+      const avatar = user.avatar || 'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + encodeURIComponent(user.username);
+
+      // --- Active status: user is "active" if they are the currentUser (for demo) ---
+      const isActive = data.currentUser === user.username;
+
+      // --- Find mods by this user ---
+      const mods = data.scripts.filter(s => s.author === user.username);
+
+      // --- Find latest comments by this user (across all scripts) ---
+      let allComments = [];
+      data.scripts.forEach(script => {
+        script.comments.forEach(c => {
+          if (c.user === user.username) {
+            allComments.push({
+              ...c,
+              scriptTitle: script.title,
+              scriptId: script.id,
+              scriptType: script.type,
+              scriptAuthor: script.author,
+              scriptDate: script.date
+            });
+          }
+        });
+      });
+      // Sort comments by date descending
+      allComments.sort((a, b) => b.date - a.date);
+
+      // --- Find favorite mods by this user ---
+      let favMods = [];
+      if (user.favorites && user.favorites.length > 0) {
+        favMods = data.scripts.filter(s => user.favorites.includes(s.id));
+      }
+
+      // --- Find registration date (approximate: earliest mod or comment, else unknown) ---
+      let regDate = null;
+      if (mods.length > 0) {
+        regDate = new Date(Math.min(...mods.map(m => m.date)));
+      } else if (allComments.length > 0) {
+        regDate = new Date(Math.min(...allComments.map(c => c.date)));
+      }
+
+      // --- Last activity: latest mod or comment ---
+      let lastActivity = null;
+      let lastActivityType = null;
+      let lastActivityDate = null;
+      if (mods.length > 0 && allComments.length > 0) {
+        if (mods[0].date > allComments[0].date) {
+          lastActivity = mods[0];
+          lastActivityType = 'mod';
+          lastActivityDate = mods[0].date;
+        } else {
+          lastActivity = allComments[0];
+          lastActivityType = 'comment';
+          lastActivityDate = allComments[0].date;
+        }
+      } else if (mods.length > 0) {
+        lastActivity = mods[0];
+        lastActivityType = 'mod';
+        lastActivityDate = mods[0].date;
+      } else if (allComments.length > 0) {
+        lastActivity = allComments[0];
+        lastActivityType = 'comment';
+        lastActivityDate = allComments[0].date;
+      }
+
+      document.getElementById('profile-section').innerHTML = `
+        <button class="profile-back-btn" onclick="closeProfile()">← Back</button>
+        <img class="profile-avatar" src="${avatar}" alt="Avatar">
+        <div class="profile-status-row">
+          <span class="profile-status-dot${isActive ? ' active' : ''}" title="${isActive ? 'Active now' : 'Offline'}"></span>
+          <span class="profile-username" style="margin-bottom:0;">${user.username}</span>
+        </div>
+        <div class="profile-info-row">
+          ${regDate ? `Joined: ${regDate.toLocaleDateString()}` : 'Joined: Unknown'}
+          <br>
+          ${lastActivityDate ? `Last activity: ${new Date(lastActivityDate).toLocaleString()}` : ''}
+        </div>
+        <div class="profile-info-row">
+          <span title="Number of mods uploaded">🧩 ${mods.length} mod${mods.length === 1 ? '' : 's'}</span>
+          &nbsp;|&nbsp;
+          <span title="Number of comments">💬 ${allComments.length} comment${allComments.length === 1 ? '' : 's'}</span>
+          &nbsp;|&nbsp;
+          <span title="Number of favorites">★ ${user.favorites && user.favorites.length ? user.favorites.length : 0} favorite${user.favorites && user.favorites.length === 1 ? '' : 's'}</span>
+        </div>
+        <div class="profile-activity-title">Latest Activity</div>
+        <div class="profile-activity-list">
+          ${
+            (mods.length === 0 && allComments.length === 0)
+              ? '<div style="color:var(--text-muted);text-align:center;">No activity yet.</div>'
+              : (
+                [
+                  ...(mods.length > 0 ? [{
+                    type: 'mod',
+                    date: mods[0].date,
+                    title: mods[0].title,
+                    desc: mods[0].desc,
+                    mod: mods[0]
+                  }] : []),
+                  ...(allComments.length > 0 ? [{
+                    type: 'comment',
+                    date: allComments[0].date,
+                    comment: allComments[0]
+                  }] : [])
+                ]
+                .sort((a, b) => b.date - a.date)
+                .slice(0, 3)
+                .map(item => {
+                  if (item.type === 'mod') {
+                    return `
+                      <div class="profile-activity-item">
+                        <span style="font-size:1.2em;">🧩</span>
+                        <div>
+                          <div class="profile-activity-meta">Uploaded a mod • ${new Date(item.date).toLocaleString()}</div>
+                          <div class="profile-activity-content" style="font-weight:600;">${item.title}</div>
+                          <div class="profile-activity-content" style="color:var(--text-muted);font-size:0.97em;">${item.mod.desc}</div>
+                          <button class="mini-btn" style="margin-top:4px;width:fit-content;" onclick="downloadScript('${item.mod.id}')">Download</button>
+                        </div>
+                      </div>
+                    `;
+                  } else if (item.type === 'comment') {
+                    return `
+                      <div class="profile-activity-item">
+                        <span style="font-size:1.2em;">💬</span>
+                        <div>
+                          <div class="profile-activity-meta">Commented on <span style="color:var(--primary);font-weight:600;">${item.comment.scriptTitle}</span> • ${new Date(item.date).toLocaleString()}</div>
+                          <div class="profile-activity-content">${item.comment.text}</div>
+                        </div>
+                      </div>
+                    `;
+                  }
+                  return '';
+                }).join('')
+              )
+          }
+        </div>
+        <div class="profile-mods-title">Mods by ${user.username}</div>
+        <div class="profile-mods-list">
+          ${mods.length === 0 ? '<div style="color:var(--text-muted);text-align:center;">No mods uploaded yet.</div>' : mods.map(m => `
+            <div class="profile-mod-card">
+              <div style="font-weight:600;">${m.title}</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);">
+                ${m.type.charAt(0).toUpperCase() + m.type.slice(1)} • ${new Date(m.date).toLocaleDateString()}
+              </div>
+              <div style="font-size:0.98rem;margin-top:2px;">${m.desc}</div>
+              <button class="mini-btn" style="margin-top:6px;width:fit-content;" onclick="downloadScript('${m.id}')">Download</button>
+            </div>
+          `).join('')}
+        </div>
+        <div class="profile-fav-title">Favorite Mods</div>
+        <div class="profile-fav-list">
+          ${
+            favMods.length === 0
+              ? '<div style="color:var(--text-muted);text-align:center;">No favorites yet.</div>'
+              : favMods.slice(0, 3).map(fm => `
+                <div class="profile-fav-item">
+                  <span class="fav-star">★</span>
+                  <span style="font-weight:600;">${fm.title}</span>
+                  <span style="color:var(--text-muted);font-size:0.95em;">by ${fm.author}</span>
+                  <button class="mini-btn" style="margin-left:auto;" onclick="downloadScript('${fm.id}')">Download</button>
+                </div>
+              `).join('')
+          }
+        </div>
+      `;
+    }
+    window.closeProfile = function() {
+      showSection(null);
+    };
+
+    // --- Script List, Search, Filter, Favorite, Comments ---
+    function renderScripts() {
+      const data = getData();
+      const user = getCurrentUser();
+      const search = document.getElementById('search-input').value.trim().toLowerCase();
+      const checkedTypes = Array.from(document.querySelectorAll('.filter-type[type="checkbox"]:checked')).map(cb => cb.value);
+      let scripts = data.scripts.filter(s => {
+        let matchType = checkedTypes.includes(s.type) || (checkedTypes.includes('favorite') && user && user.favorites.includes(s.id));
+        let matchSearch = !search || s.title.toLowerCase().includes(search) || s.desc.toLowerCase().includes(search) || s.author.toLowerCase().includes(search);
+        return matchType && matchSearch;
+      });
+      const list = document.getElementById('scripts-list');
+      list.innerHTML = '';
+      if (scripts.length === 0) {
+        list.innerHTML = '<div style="color:var(--text-muted);font-size:1.1rem;">No mods found. Be the first to upload!</div>';
+        return;
+      }
+      scripts.forEach(script => {
+        const card = document.createElement('div');
+        card.className = 'script-card';
+        card.innerHTML = `
+          <div class="script-title">${script.title}</div>
+          <div class="script-meta">
+            <img class="avatar" src="${script.avatar || 'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + encodeURIComponent(script.author)}" alt="Avatar" data-username="${script.author}">
+            <span>by <span class="author-link" data-username="${script.author}" style="color:var(--primary);cursor:pointer;text-decoration:underline;">${script.author}</span></span>
+            <span>• ${script.type.charAt(0).toUpperCase() + script.type.slice(1)}</span>
+            <span>• ${new Date(script.date).toLocaleDateString()}</span>
+          </div>
+          <div class="script-desc">${script.desc}</div>
+          <div class="script-actions">
+            <button class="mini-btn" onclick="downloadScript('${script.id}')">Download</button>
+            <button class="favorite-btn${user && user.favorites.includes(script.id) ? ' favorited' : ''}" onclick="toggleFavorite('${script.id}')">
+              <span>★</span> Favorite
+            </button>
+          </div>
+          <div class="comments-section" id="comments-${script.id}">
+            <div style="font-weight:600;color:var(--primary);margin-bottom:6px;">Comments</div>
+            <div class="comments-list">
+              ${script.comments.map(c => `
+                <div class="comment">
+                  <img class="avatar" src="${c.avatar || 'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + encodeURIComponent(c.user)}" alt="Avatar" data-username="${c.user}">
+                  <div>
+                    <div class="comment-meta"><span class="author-link" data-username="${c.user}" style="color:var(--primary);cursor:pointer;text-decoration:underline;">${c.user}</span> • ${new Date(c.date).toLocaleDateString()}</div>
+                    <div class="comment-content">${c.text}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <form class="add-comment-form" onsubmit="return addComment('${script.id}', this)">
+              <input type="text" name="comment" placeholder="Add a comment..." required ${user ? '' : 'disabled'}>
+              <button type="submit" ${user ? '' : 'disabled'}>Post</button>
+            </form>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      // Add event listeners for avatar and author-link clicks (profile view)
+      document.querySelectorAll('.script-card .avatar, .script-card .author-link, .comment .avatar, .comment-meta .author-link').forEach(el => {
+        el.onclick = function(e) {
+          const username = this.getAttribute('data-username');
+          if (username) {
+            showSection('profile');
+            renderProfileSection(username);
+            document.getElementById('profile-section').scrollIntoView({behavior: 'smooth'});
+          }
+          e.stopPropagation();
+        };
+      });
+    }
+    window.downloadScript = function(id) {
+      const data = getData();
+      const script = data.scripts.find(s => s.id == id);
+      if (!script || !script.file) {
+        alert('No file available.');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = script.file;
+      a.download = script.title.replace(/\s+/g, '_') + '.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+    window.toggleFavorite = function(id) {
+      const data = getData();
+      const user = getCurrentUser();
+      if (!user) {
+        alert('You must be logged in to favorite.');
+        return;
+      }
+      const idx = user.favorites.indexOf(Number(id));
+      if (idx === -1) user.favorites.push(Number(id));
+      else user.favorites.splice(idx, 1);
+      // update in users array
+      const uidx = data.users.findIndex(u => u.username === user.username);
+      data.users[uidx] = user;
+      setData(data);
+      renderScripts();
+    };
+    window.addComment = function(id, form) {
+      const user = getCurrentUser();
+      if (!user) {
+        alert('You must be logged in to comment.');
+        return false;
+      }
+      const text = form.comment.value.trim();
+      if (!text) return false;
+      let data = getData();
+      const script = data.scripts.find(s => s.id == id);
+      script.comments.push({
+        user: user.username,
+        avatar: user.avatar,
+        text,
+        date: Date.now()
+      });
+      setData(data);
+      renderScripts();
+      return false;
+    };
+
+    // --- Filter & Search ---
+    document.getElementById('search-btn').onclick = renderScripts;
+    document.getElementById('search-input').onkeyup = function(e) {
+      if (e.key === 'Enter') renderScripts();
+    };
+    document.querySelectorAll('.filter-type').forEach(cb => {
+      cb.onchange = renderScripts;
+    });
+
+    // --- Initial Render ---
+    renderScripts();
+
+    // --- Show correct section on load ---
+    showSection(null);
+
+    // --- Show account avatar on account section show ---
+    document.getElementById('account-section').addEventListener('show', renderAccountSection);
+
+    // --- Patch: renderAccountSection on showSection('account') ---
+    const origShowSection = showSection;
+    showSection = function(section) {
+      origShowSection(section);
+      if (section === 'account') renderAccountSection();
+      if (section === 'profile') {
+        // nothing, handled by renderProfileSection
+      }
+    };
+  </script>
